@@ -36,10 +36,10 @@
                 <!-- Tabla de articulos-->
                 <table id="tabla" border="1">
                     <thead>
-                    <tr>
-                        <td class="text-center font-weight-bold">Id</td>
-                        <td class="text-center font-weight-bold">Nombre</td>
-                    </tr>
+                        <tr>
+                            <td class="text-center font-weight-bold">Id</td>
+                            <td class="text-center font-weight-bold">Nombre</td>
+                        </tr>
                     </thead>
                     <tr v-for="category in categories">
                         <td class="text-center"><a href="#" @click="obtenerid(category.id)">{{ category.id }}</a></td>
@@ -48,9 +48,8 @@
                 </table>
 
                 <div class="w-100 d-flex justify-content-center">
-                    <button type="button" class="btn btnModal" id="agregar" @click="addArticulo()">Agregar</button>
+                    <button type="button" class="btn btnModal" id="agregar" onclick="addArticulo()">Agregar</button>
                 </div>
-
                 <!--  MODAL -->
                 <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalCat" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -76,15 +75,14 @@
                                 <h4>{{category.finalcategory.total_items_in_this_category}}</h4>
                             </div>
                             <div class="modal-footer d-flex justify-content-center">
-                                <button type="button" class="btn btnModal" id="editar" @click="editArticulo(category.finalcategory)">Edit</button>
-                                <button type="button" class="btn btnModal" id="eliminar" @click="deleteArticulo(category.finalcategory)">Delete</button>
+                                <button type="button" class="btn btnModal" id="editar" @click="editArticulo(category.finalcategory.id)">Edit</button>
+                                <button type="button" class="btn btnModal" id="eliminar" data-dismiss="modal" @click="deleteArticulo(category.finalcategory)">Delete</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- MODAL-->
             </div>
-
         </div>
     </div>
 
@@ -122,23 +120,21 @@
                             document.getElementById("imglink").href = category.finalcategory.picture;
                             mostrarModal()
                         }
-
                     }).catch(function (error) {
                         console.log(error)
                     })
                 },
-                fetchDataEditCategory: function (id) {
-                    axios.get('/homework/edit', {
-                        params:{
+                fetchDataDeleteCategory: function (id) {
+                    axios.get('/homework/delete', {
+                        params: {
                             id: id
                         }
                     }).then(function (response) {
-                            alert("hola")
+                        alert("eliminado")
                     }).catch(function (error) {
                         console.log(error)
                     })
                 }
-
             }
         })
 
@@ -163,13 +159,21 @@
 
         }
 
-        function editArticulo(cat){
-           location.href= "http://localhost:8084/homework/edit?id="+cat.id;
+        function addArticulo() {
+            var idM = document.getElementById("select").value;
+            location.href="http://localhost:8084/homework/create?id="+idM;
         }
 
-        function deleteArticulo(category){
-
+        function editArticulo(id){
+            alert("entre aca");
+           location.href= "http://localhost:8084/homework/edit?id="+id;
         }
+
+        function deleteArticulo(cat){
+            alert("hola");
+            category.fetchDataDeleteCategory(cat.id);
+        }
+
 
     </script>
 
